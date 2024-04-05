@@ -1,0 +1,115 @@
+{% extends 'authentication/base.html' %}
+
+{% block content %}
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'chat.css' %}">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+<body>
+  <div class="container-fluid mt-5">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card chat-sidebar p-4">
+          <video id="video" class="w-100" autoplay style="display: none;"></video>
+          <canvas id="canvas" class="mt-3 w-100" style="display: none;"></canvas>
+          <div id="emotion-result" class="mt-4">
+            <p class="mb-0">Detected Emotion: <span id="detected-emotion" class="text-success"></span></p>
+          </div>
+          <div id="loading-indicator" class="mt-3" style="display: none;">
+            <div class="spinner-border text-primary" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+          <div id="error-message" class="alert alert-danger mt-3" style="display: none;">
+            <strong>Error:</strong> Something went wrong.
+          </div>
+          <div class="mt-3">
+            <button id="start" class="btn btn-primary">Start</button>
+            <button id="stop" class="btn btn-danger" style="display: none;">Stop</button>
+          </div>
+          <div class="card-header bg-light text-dark">
+            <h5 class="mb-0">Recent Chats</h5>
+          </div>
+          <div class="card-body">
+            <ul class="list-group">
+              {% for chat in chatbot_chats %}
+                <style>
+                  .list-group-item a {
+                      margin-right: 10px;
+                  }
+                </style>
+              
+                <li class="list-group-item">
+                    <a href="{% url 'chat:chat_detail' chat_id=chat.id %}">
+                        Chat with {{ chat.chatbot.username }} 
+                    </a>
+                    <a href="{% url 'chat:chat_delete' chat_id=chat.id %}" class="btn btn-danger rounded-pill">Delete</a>
+                </li>
+              
+                
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+        <div id="consentModal" class="modal" tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Consent Required</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>In order to use this feature, you must agree to our terms of service.</p>
+              </div>
+              <div class="modal-footer">
+                <button id="agreeButton" class="btn btn-primary rounded-pill">Agree</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        
+      </div>
+
+      <div class="col-md-8">
+        <div class="card chat-container mt-4">
+          <div class="card-header bg-light text-dark" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+            <h2 class="mb-0">Chats</h2>
+          </div>
+          <div class="card-body chat-body" style="background-color: #f8f9fa;">
+            <div id="chat-messages" class="overflow-auto bg-light flex-grow-1" style="max-height: 400px; padding: 15px; border-radius: 10px;">
+              {% for message in messages %}
+                <div class="message {% if message.sender == request.user %}outgoing{% else %}incoming{% endif %}" style="margin-bottom: 15px;">
+                  <div class="message-content {% if message.sender == request.user %}outgoing-bg{% else %}incoming-bg{% endif %}" style="padding: 10px; border-radius: 10px;">
+                    {{ message.content }}
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="card-footer" style="background-color: #f8f9fa;">
+            <form id="message-form" method="POST" action="{% url 'chat:chat_detail' chat_id=chat.id %}">
+              {% csrf_token %}
+              <div class="input-group">
+                <input type="text" name="content" class="form-control rounded-pill" placeholder="Type your message..." style="border: none; box-shadow: 0 0 10px rgba(0,0,0,0.1);" />
+                <div class="input-group-append">
+                  <button type="submit" class="btn btn-primary rounded-pill">Send</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="{% static 'chat.js' %}"></script>
+</body>
+
+{% endblock %}

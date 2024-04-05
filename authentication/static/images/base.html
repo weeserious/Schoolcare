@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Your Site Title{% endblock %}</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyIxL1pDmQ8fXRSUQ8S6RTt8+pR6L4N2T" crossorigin="anonymous">
+ 
+ 
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Your Site</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'student_signup' %}">Student Signup</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'detect_emotion' %}">Demo</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Login</a>
+          </li>
+          <li class="nav-item">
+            <form class="nav-link" method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" style="background:none;border:none;padding:0;color:grey;cursor:pointer;">Logout</button>
+            </form>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'student_dashboard' %}">Student Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'counselor_dashboard' %}">Counselor Dashboard</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+  <div class="container mt-4">
+    {% block content %}{% endblock %}
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" integrity="sha384-Xn538koSYRvlqixuOV87WuLEw5ZFuJgq9PFScYpJ4l5zs45U6+J5uSkkP5GkN" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyIxL1pDmQ8fXRSUQ8S6RTt8+pR6L4N2T" crossorigin="anonymous"></script>
+  
+
+</body>
+</html>

@@ -1,0 +1,97 @@
+{% extends 'authentication/base.html' %}
+
+{% block content %}
+
+<style>
+
+  .visually-hidden { 
+      position: absolute !important;
+      clip: rect(1px 1px 1px 1px); 
+      clip: rect(1px, 1px, 1px, 1px);
+      padding:0 !important;
+      border:0 !important;
+      height: 1px !important; 
+      width: 1px !important; 
+      overflow: hidden;
+  }
+  .btn-primary {
+      display: block;
+      width: 200px;
+      height: 50px;
+      margin: 20px auto;
+      background-color: #007bff;
+      color: white;
+      border-radius: 4px;
+      border: none;
+      font-size: 20px;
+  }
+  .btn-primary:hover {
+      background-color: #0056b3;
+  }
+  .custom-file-upload {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background-color: #007bff;
+    border: 2px solid #007bff;
+    border-radius: 4px;
+    width: 100%; 
+    height: 100px;
+    margin: 20px auto;
+    color: white;
+    font-size: 18px;
+    position: relative;
+  }
+
+  .custom-file-upload:hover {
+    background-color: #0056b3;
+  }
+
+  .upload-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+  }
+
+  .container {
+    margin-top: 50px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+</style>
+
+<div class="container">
+  <h2 class="mt-4 mb-4">Emotion Detection</h2>
+  <form method="POST" enctype="multipart/form-data" class="mb-4">
+    {% csrf_token %}
+    
+    <label for="file-upload" class="custom-file-upload">
+      <i class="fas fa-cloud-upload mr-2"></i> Choose an Image
+    </label>
+    <input id="file-upload" type="file" name="image" class="visually-hidden"/>
+  
+    <button type="submit" class="btn btn-primary">Detect Emotion</button>
+  </form>
+
+  {% if detected_emotion %}
+    <h2 class="mt-4">Detected Emotion: {{ detected_emotion }}</h2>
+  {% endif %}
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#file-upload').change(function() {
+      var fileName = $(this).val().split('\\').pop(); 
+      $('.custom-file-upload').append('<i class="fas fa-check upload-icon"></i>'); 
+    });
+  });
+</script>
+
+{% endblock %}

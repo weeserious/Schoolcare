@@ -1,0 +1,67 @@
+{% extends 'authentication/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card shadow-lg rounded">
+        <div class="card-header bg-light text-dark">
+          <h2 class="mb-0">Chatbot Chats</h2>
+        </div>
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            {% for chat in chatbot_chats %}
+              <li class="list-group-item">
+                <a href="{% url 'chat:chat_detail' chat_id=chat.id %}" class="text-decoration-none">
+                  Chat with {{ chat.chatbot.username }} - {{ chat.last_message.timestamp|date:"F j, Y H:i:s" }}
+                </a>
+                {% comment %} <br/> {% endcomment %}
+                <a href="{% url 'chat:chat_delete' chat_id=chat.id %}" class="btn btn-danger rounded-pill">Delete</a>
+
+              </li>
+              
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <!-- Create a New Chat Section -->
+      <div class="card shadow-lg rounded">
+        <div class="card-header bg-light text-dark">
+          <h2 class="mb-0">Create a New Chat</h2>
+        </div>
+        <div class="card-body">
+          <!-- Provide a link to start a new chat -->
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <a href="{% url 'chat:chat_create' %}" class="btn btn-primary rounded-pill">Start chat with Chatbot</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .list-group-item {
+    cursor: pointer;
+  }
+
+  .list-group-item:hover {
+    background-color: #f8f9fa;
+  }
+
+  .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+
+  .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+  }
+</style>
+{% endblock %}

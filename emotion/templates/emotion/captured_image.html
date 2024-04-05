@@ -1,0 +1,74 @@
+% extends 'authentication/base.html' %}
+
+{% block content %}
+    <div class="container">
+        <video id="video" width="640" height="480" autoplay></video>
+        <button id="snap" class="btn btn-primary">Snap Photo</button>
+        <canvas id="canvas" width="640" height="480"></canvas>
+
+    </div>
+    <div id="emotion-result" class="mt-4">
+        {% if detected_emotion %}
+            <h2>Detected Emotion: <span id="detected-emotion">{{ detected_emotion }}</span></h2>
+        {% endif %}
+    </div>
+    <br/><br/><br/><br/>
+    
+    <script>
+        var video = document.getElementById('video');
+        var canvas = document.getElementById('canvas');
+        var context = canvas.getContext('2d');
+        var snap = document.getElementById('snap');
+        var emotionResult = document.getElementById('detected-emotion');
+
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: true }).then(function (stream) {
+                video.srcObject = stream;
+                video.play();
+            });
+        }
+
+        snap.addEventListener("click", function () {
+            context.drawImage(video, 0, 0, 640, 480);
+            var dataUrl = canvas.toDataURL('image/jpeg');
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/emotion-detection/capture/', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+    
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    console.log('Response:', xhr.responseText);
+    
+                    if (xhr.status === 200) {
+                        var responseData = JSON.parse(xhr.responseText);
+                        console.log('Parsed Response:', responseData);
+    
+                        if (responseData.detected_emotion) {
+                            window.location.href = '/emotion-detection/result/' + responseData.detected_emotion;
+                        }
+                    } else {
+                        console.error('Error:', xhr.status, xhr.statusText);
+                    }
+                }
+            };
+    
+            xhr.send('image=' + encodeURIComponent(dataUrl));
+        });
+
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+{% endblock %}
