@@ -27,13 +27,6 @@ def detect_emotion(request):
             thread1 = threading.Thread(target=emotion_recognition, args=(emotion_record,))
             thread1.start()
             thread1.join()
-            if emotion_record.emotion_level == 3:
-                 notify_counselor({
-                     'student': emotion_record.user,
-                     'emotion_record': emotion_record, 
-                 })
-                 print(f'record : {emotion_record.user}')
-
         return render(request, 'emotion/result.html', {'detected_emotion': emotion_record.emotion_level})
     else:
         form = EmotionDetectionForm()
@@ -109,19 +102,6 @@ def stop_live_emotion_detection(request, emotion_record_id):
 
     return redirect('detect_emotion')
 
-
-def notify_counselor(emotion_record):
-    if emotion_record.emotion_level == 'sad':
-        print("last hope")
-        counselor = get_random_counselor()
-        if counselor:
-            message = f'Severe emotion detected for {emotion_record.user.username}. Please check in on the student.'
-            Notification.objects.create(
-                counselor=counselor,
-                student=emotion_record.user,
-                emotion_record=emotion_record,
-                message=message
-            )
 
 def get_random_counselor():
     return CustomUser.objects.filter(role='counselor').first()

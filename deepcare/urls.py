@@ -21,8 +21,5 @@ urlpatterns = [
     path('',include('authentication.urls')),
     path('admin/', admin.site.urls),
     path('emotion-detection/', include('emotion.urls')),
-    path('counsellor/', include('counsellor.urls')),
-    path('notification/', include('notification.urls')),
-     path('student/', include('student.urls')),
 
 ]

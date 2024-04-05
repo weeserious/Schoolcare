@@ -12,7 +12,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.http import urlsafe_base64_decode
 from .chatbot import Chatbot
-from .forms import MessageForm
 
 
 
