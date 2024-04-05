@@ -8,11 +8,7 @@ class StudentCreationForm(UserCreationForm):
         model = CustomUser
         fields = ['username', 'email', 'password1', 'password2']
 
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-        if not email.endswith('@students.jkuat.ac.ke'):
-            raise ValidationError("Invalid email address. Only @students.jkuat.ac.ke domain is allowed.")
-        return email
+    
 
 
 class LoginForm(forms.Form):
