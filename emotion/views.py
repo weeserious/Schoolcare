@@ -14,6 +14,7 @@ from django.core.files.base import ContentFile
 
 def result(request, detected_emotion):
     return render(request, 'emotion/result.html', {'detected_emotion': detected_emotion})
+    
 @login_required
 def detect_emotion(request):
     if request.method == 'POST':
@@ -68,12 +69,6 @@ def emotion_recognition(emotion_record):
         print(f"Detected emotion: {detected_emotion}")  
 
         emotion_record.emotion_level = detected_emotion
-
-        if detected_emotion == "sad":
-            
-           notify_counselor(emotion_record)
-           print(f"been there")
-
 
         emotion_record.save()
 
