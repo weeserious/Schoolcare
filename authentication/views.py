@@ -34,7 +34,7 @@ def student_signup(request):
 
             send_confirmation_email(student)
 
-            messages.success(request, 'Student registration successful. Please check your email for confirmation.')
+            messages.success(request, ' registration successful')
             return redirect('student_dashboard') 
         else:
             messages.error(request, 'Error in student registration. Please correct the errors below.')
@@ -122,7 +122,7 @@ def chat_detail(request, chat_id):
     form = MessageForm()
 
 
-    chatbot_username = "deepcare"
+    chatbot_username = "Shambapp"
 
     chatbot_chats = Chat.objects.filter(user=request.user, chatbot__username=chatbot_username)
 
@@ -130,7 +130,7 @@ def chat_detail(request, chat_id):
         chatbot_user = CustomUser.objects.get(username=chatbot_username)
         chatbot_chat = Chat.objects.create(user=request.user, chatbot=chatbot_user)
 
-        initial_message_content = "Student"
+        initial_message_content = " "
         initial_message = Message.objects.create(chat=chatbot_chat, sender=request.user, content=initial_message_content)
 
         chatbot_response = chatbot.respond(initial_message_content)
@@ -154,7 +154,7 @@ def chat_detail(request, chat_id):
 
 @login_required
 def chat_create(request):
-    chatbot_username = "deepcare"
+    chatbot_username = "shambapp"
 
     chatbot_user = CustomUser.objects.get(username=chatbot_username)
     chatbot_chat = Chat.objects.create(user=request.user, chatbot=chatbot_user)
@@ -165,12 +165,12 @@ def chat_create(request):
     chatbot_response = chatbot.respond(initial_message_content)
     bot_message = Message.objects.create(chat=chatbot_chat, sender=chatbot_chat.chatbot, content=chatbot_response)
 
-    return redirect('chat:chat_detail', chat_id=chatbot_chat.id)
+    return redirect('chat_detail', chat_id=chatbot_chat.id)
 
 @login_required
 def chat_delete(request, chat_id):
     chat = get_object_or_404(Chat, id=chat_id, user=request.user)
     chat.delete()
-    return redirect('chat:chat_list')
+    return redirect('chat_list')
 
 

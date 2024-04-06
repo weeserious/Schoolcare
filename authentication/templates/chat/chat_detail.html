@@ -9,70 +9,7 @@
 <body>
   <div class="container-fluid mt-5">
     <div class="row">
-      <div class="col-md-4">
-        <div class="card chat-sidebar p-4">
-          <video id="video" class="w-100" autoplay style="display: none;"></video>
-          <canvas id="canvas" class="mt-3 w-100" style="display: none;"></canvas>
-          <div id="emotion-result" class="mt-4">
-            <p class="mb-0">Detected Emotion: <span id="detected-emotion" class="text-success"></span></p>
-          </div>
-          <div id="loading-indicator" class="mt-3" style="display: none;">
-            <div class="spinner-border text-primary" role="status">
-              <span class="sr-only">Loading...</span>
-            </div>
-          </div>
-          <div id="error-message" class="alert alert-danger mt-3" style="display: none;">
-            <strong>Error:</strong> Something went wrong.
-          </div>
-          <div class="mt-3">
-            <button id="start" class="btn btn-primary">Start</button>
-            <button id="stop" class="btn btn-danger" style="display: none;">Stop</button>
-          </div>
-          <div class="card-header bg-light text-dark">
-            <h5 class="mb-0">Recent Chats</h5>
-          </div>
-          <div class="card-body">
-            <ul class="list-group">
-              {% for chat in chatbot_chats %}
-                <style>
-                  .list-group-item a {
-                      margin-right: 10px;
-                  }
-                </style>
-              
-                <li class="list-group-item">
-                    <a href="{% url 'chat:chat_detail' chat_id=chat.id %}">
-                        Chat with {{ chat.chatbot.username }} 
-                    </a>
-                    <a href="{% url 'chat:chat_delete' chat_id=chat.id %}" class="btn btn-danger rounded-pill">Delete</a>
-                </li>
-              
-                
-              {% endfor %}
-            </ul>
-          </div>
-        </div>
-        <div id="consentModal" class="modal" tabindex="-1" role="dialog">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">Consent Required</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <p>In order to use this feature, you must agree to our terms of service.</p>
-              </div>
-              <div class="modal-footer">
-                <button id="agreeButton" class="btn btn-primary rounded-pill">Agree</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        
-      </div>
+      
 
       <div class="col-md-8">
         <div class="card chat-container mt-4">
